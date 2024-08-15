@@ -20,7 +20,7 @@ export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<
 	type: FieldType
 	placeholder?: string
 	required?: boolean
-	defaultValue?: ((string | number | readonly string[]) & PathValue<T, Path<T>>) | undefined
+	value?: ((string | number | readonly string[]) & PathValue<T, Path<T>>) | undefined
 	dependency?: {
 		on: string //field name
 		condition :  DependencyCondition<T>

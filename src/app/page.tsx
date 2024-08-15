@@ -1,8 +1,8 @@
 'use client'
 import DynamicForm from '@/components/form/dynamic-form'
 import { useFormContext } from '@/context/form-context'
-import { FormConfig } from '@/types/form'
 import { useEffect, useState } from 'react'
+import { FormConfig } from '@/types/form'
 
 const formConfig1: FormConfig<any> = {
 	form: {
@@ -13,36 +13,54 @@ const formConfig1: FormConfig<any> = {
 		}
 	},
 	fields: [
-		{ name: 'username', label: 'Username', type: 'text', required: true, placeholder :"Username", defaultValue : "rohit" },
-		{ name: 'email', label: 'Email', type: 'email', required: true, placeholder : "Username2", defaultValue : "gello world" }
-	]
-}
-
-const formConfig2: FormConfig<any> = {
-	form: {
-		id: '2',
-		submitText: 'submit',
-		onSubmit: (data) => {
-			console.log('form2', data)
+		{
+			name: 'username',
+			label: 'Username',
+			type: 'text',
+			required: true,
+			placeholder: 'Username',
+			value: 'rohit'
+		},
+		{
+			name: 'email',
+			label: 'Email',
+			type: 'email',
+			required: true,
+			placeholder: 'Email',
+			value: 'hello@sadds'
 		}
-	},
-	fields: [
-		{ name: 'password', label: 'Password', type: 'password', required: true },
-		{ name: 'confirmPassword', label: 'Confirm Password', type: 'password', required: true }
 	]
 }
 
 const Home = () => {
+	const { forms, getFormValue, watchFormValue } = useFormContext()
+
+	const handleClick = (id: string) => {
+		const value = getFormValue(id, 'username')
+		console.log({ value })
+	}
+
+	useEffect(() => {
+		const subscription = watchFormValue("1", ["username"], (values) =>
+			console.log(values)
+		)
+		return () => subscription()
+	}, [watchFormValue])
+	
+
 
 	return (
 		<>
+			<button onClick={() => handleClick('1')}>Click</button>
 			<DynamicForm
-				id='form1'
+				id='1'
 				config={formConfig1}
 			/>
+			<button onClick={() => handleClick('2')}>Click</button>
+
 			<DynamicForm
-				id='form2'
-				config={formConfig2}
+				id='2'
+				config={formConfig1}
 			/>
 		</>
 	)

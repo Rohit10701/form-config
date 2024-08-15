@@ -1,5 +1,4 @@
-import React, { ReactNode } from 'react';
-import { FieldInput, FieldType } from '@/types/form';
+import { FieldInput } from '@/types/form';
 
 const Input = <T extends Record<string, unknown>>({
   name,
@@ -7,19 +6,21 @@ const Input = <T extends Record<string, unknown>>({
   type,
   placeholder,
   required,
-  defaultValue,
-  dependency,
+  value = "",
+  onChange,
   ...props
 }: FieldInput<T>) => {
   return (
     <>
-      <label>{label}</label>
+      <label htmlFor={name}>{label}</label>
       <input
+        id={name}
         name={name}
         type={type}
         placeholder={placeholder}
         required={required}
-        value={defaultValue}
+        value={value}
+        onChange={onChange}
         {...props}
       />
     </>

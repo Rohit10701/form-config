@@ -1,12 +1,8 @@
-import { useFormContext } from "@/context/form-context";
-import {
-  DynamicFormProps,
-  FieldInput,
-} from "@/types/form";
 import { Controller, Path, PathValue } from "react-hook-form";
-import Input from "../base/input";
 import { useEffect } from "react";
 import useDynamicForm from "@/hooks/use-dynamic-form";
+import Input from "../base/input";
+import { DynamicFormProps, FieldInput } from "@/types/form";
 
 const DynamicForm = <T extends Record<string, unknown>>({
   id,
@@ -34,29 +30,28 @@ const DynamicForm = <T extends Record<string, unknown>>({
     config?.form?.onSubmit(data);
   };
 
+  console.log({config})
   return (
-    <>
-      <form onSubmit={handleSubmit(submitHandler)}>
-        {config.fields?.map((field: FieldInput<T>) => (
-          <Controller
-            key={field.name}
-            name={field.name as Path<T>}
-            control={control}
-            render={({ field: controlledField }) => (
-              <Input
-                {...field}
-                defaultValue={controlledField.defaultValue}
-                onChange={controlledField.onChange}
-                onBlur={controlledField.onBlur}
-                disabled={controlledField.disabled}
-                name={controlledField.name}
-              />
-            )}
-          />
-        ))}
-        <button>{config?.form?.submitText}</button>
-      </form>
-    </>
+    <form onSubmit={handleSubmit(submitHandler)}>
+      {config.fields?.map((fieldData: FieldInput<T>) => (
+        <Controller
+          key={fieldData.name}
+          name={fieldData.name as Path<T>}
+          control={control}
+          render={({ field: controlledField }) => (
+            <Input
+              {...fieldData}
+              value={controlledField.value}
+              onChange={controlledField.onChange}
+              onBlur={controlledField.onBlur}
+              disabled={controlledField.disabled}
+              name={controlledField.name}
+            />
+          )}
+        />
+      ))}
+      <button>{config?.form?.submitText}</button>
+    </form>
   );
 };
 
