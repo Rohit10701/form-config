@@ -19,7 +19,7 @@ const Input = <T extends Record<string, unknown>>({
         type={type}
         placeholder={placeholder}
         required={required}
-        defaultValue={defaultValue}
+        value={defaultValue}
         {...props}
       />
     </>

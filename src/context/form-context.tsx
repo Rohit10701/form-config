@@ -1,4 +1,5 @@
 "use client"
+import { FieldType } from '@/types/form'
 import { ReactNode, createContext, useContext, useState } from 'react'
 import { FieldValues, UseFormReturn } from 'react-hook-form'
 
@@ -33,11 +34,11 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
 	// 		forms?.[id]?.setValue(name as string, value)
 	// }
 
-	const getFormValue = (id: string, name: FieldType | number | symbol) => {
+	const getFormValue = (id: string, name: string | number | symbol) => {
 		return forms?.[id]?.getValues(name as string)
 	}
 
-	const watchFormValue = (id: string, name: FieldType | number | symbol) => {
+	const watchFormValue = (id: string, name: string | number | symbol) => {
 			return forms?.[id]?.watch(name as string)
 	}
 

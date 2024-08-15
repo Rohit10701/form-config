@@ -1,9 +1,7 @@
 import { useFormContext } from "@/context/form-context";
 import {
   DynamicFormProps,
-  FieldConfig,
   FieldInput,
-  FormConfig,
 } from "@/types/form";
 import { Controller, Path, PathValue } from "react-hook-form";
 import Input from "../base/input";
@@ -19,26 +17,23 @@ const DynamicForm = <T extends Record<string, unknown>>({
     control,
     handleSubmit,
     setValue,
-    config: formConfig,
   } = useDynamicForm<T>(id, config);
 
-  // Todo : have just one default setter just using config
   useEffect(() => {
     if (defaultValues) {
       Object.keys(defaultValues).forEach((key) => {
         setValue(
           key as Path<T>,
-          defaultValues[key as Path<T>] as PathValue<T, Path<T>>,
+          defaultValues[key as keyof T] as PathValue<T, Path<T>>,
         );
       });
     }
   }, [setValue, defaultValues]);
 
-
-
   const submitHandler = (data: T) => {
     config?.form?.onSubmit(data);
   };
+
   return (
     <>
       <form onSubmit={handleSubmit(submitHandler)}>
@@ -50,7 +45,7 @@ const DynamicForm = <T extends Record<string, unknown>>({
             render={({ field: controlledField }) => (
               <Input
                 {...field}
-                defaultValue={controlledField.value}
+                defaultValue={controlledField.defaultValue}
                 onChange={controlledField.onChange}
                 onBlur={controlledField.onBlur}
                 disabled={controlledField.disabled}
