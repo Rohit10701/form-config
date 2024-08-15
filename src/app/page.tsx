@@ -3,6 +3,8 @@ import DynamicForm from '@/components/form/dynamic-form'
 import { useFormContext } from '@/context/form-context'
 import { useEffect, useState } from 'react'
 import { FormConfig } from '@/types/form'
+import { useWatch } from 'react-hook-form'
+import useFormWatch from '@/hooks/use-form-watch'
 
 const formConfig1: FormConfig<any> = {
 	form: {
@@ -34,18 +36,13 @@ const formConfig1: FormConfig<any> = {
 
 const Home = () => {
 	const { forms, getFormValue, watchFormValue } = useFormContext()
-
+	const value  = useFormWatch("1")
 	const handleClick = (id: string) => {
 		const value = getFormValue(id, 'username')
 		console.log({ value })
 	}
 
-	useEffect(() => {
-		const subscription = watchFormValue("1", ["username"], (values) =>
-			console.log(values)
-		)
-		return () => subscription()
-	}, [watchFormValue])
+	console.log({value})
 	
 
 
