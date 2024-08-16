@@ -1,11 +1,22 @@
 import { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FieldErrors, FieldName, useForm } from 'react-hook-form'
 import Input from '../base/input'
-import { DynamicFormProps, FieldInput } from '@/types/form'
+import { DependencyValue, DynamicFormProps, FieldInput } from '@/types/form'
 import useDynamicForm from '@/hooks/use-dynamic-form'
+import { FieldValuesFromFieldErrors } from '@hookform/error-message'
 
-const DynamicForm = <T extends Record<string, unknown>>({ id, config }: DynamicFormProps<T>) => {
-	const { control, handleSubmit, reset, watch } = useDynamicForm<T>(id, config)
+const DynamicForm = <T extends Record<string, unknown>>({
+	id,
+	config,
+	schema
+}: DynamicFormProps<T>) => {
+	const {
+		control,
+		handleSubmit,
+		reset,
+		watch,
+		formState: { errors }
+	} = useDynamicForm<T>(id, config, schema)
 
 	// Extract default values from config fields
 	useEffect(() => {
@@ -26,37 +37,42 @@ const DynamicForm = <T extends Record<string, unknown>>({ id, config }: DynamicF
 		config?.form?.onSubmit(data)
 	}
 
-	return (
-<form onSubmit={handleSubmit(submitHandler)}>
-      {config.fields?.map((fieldData: FieldInput<T>) => {
-        const dependencyValues = fieldData.dependency?.on.reduce((acc, fieldName) => {
-          acc[fieldName] = watch(fieldName as keyof T)
-          return acc
-        }, {} as Record<string, unknown>)
+	console.log({ errors })
 
-        return (
-          (!fieldData.dependency || (fieldData.dependency &&
-            fieldData.dependency.condition(dependencyValues))) && (
-            <Controller
-              key={fieldData.name}
-              name={fieldData.name}
-              control={control}
-              render={({ field: controlledField }) => (
-                <Input
-                  {...fieldData}
-                  value={controlledField.value ?? ''}
-                  onChange={controlledField.onChange}
-                  onBlur={controlledField.onBlur}
-                  disabled={controlledField.disabled}
-                  name={controlledField.name as string}
-                />
-              )}
-            />
-          )
-        )
-      })}
-      <button type='submit'>{config?.form?.submitText}</button>
-    </form>
+	return (
+		<form onSubmit={handleSubmit(submitHandler)}>
+			{config.fields?.map((fieldData: FieldInput<T>) => {
+				const dependencyValues = fieldData.dependency?.on.reduce((acc, fieldName) => {
+					acc[fieldName] = watch(fieldName as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>)
+					return acc
+				}, {} as DependencyValue<string[]>)
+
+				return (
+					(!fieldData.dependency ||
+						(fieldData.dependency && fieldData.dependency.condition(dependencyValues))) && (
+						<Controller
+							key={fieldData.name}
+							name={fieldData.name}
+							control={control}
+							render={({ field: controlledField }) => (
+								<Input
+									{...fieldData}
+									errors={errors}
+									value={controlledField.value}
+									onChange={controlledField.onChange}
+									onBlur={controlledField.onBlur}
+									disabled={controlledField.disabled}
+									name={
+										controlledField.name as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
+									}
+								/>
+							)}
+						/>
+					)
+				)
+			})}
+			<button type='submit'>{config?.form?.submitText}</button>
+		</form>
 	)
 }
 

@@ -1,4 +1,5 @@
 import { FieldInput } from '@/types/form';
+import { ErrorMessage } from "@hookform/error-message"
 
 const Input = <T extends Record<string, unknown>>({
   name,
@@ -6,8 +7,9 @@ const Input = <T extends Record<string, unknown>>({
   type,
   placeholder,
   required,
-  value = "",
+  value,
   onChange,
+  errors,
   ...props
 }: FieldInput<T>) => {
   return (
@@ -23,7 +25,8 @@ const Input = <T extends Record<string, unknown>>({
         onChange={onChange}
         {...props}
       />
-    </>
+      <ErrorMessage errors={errors} name={name} />
+      </>
   );
 };
 

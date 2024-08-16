@@ -1,5 +1,7 @@
+import { FieldValuesFromFieldErrors } from '@hookform/error-message'
 import React, { InputHTMLAttributes, ReactNode } from 'react'
-import { Path, PathValue } from 'react-hook-form'
+import { FieldErrors, FieldName, Path, PathValue } from 'react-hook-form'
+import { ZodType } from 'zod'
 
 export interface FormConfig<T extends Record<string, unknown>> {
 	form: {
@@ -15,15 +17,16 @@ export interface FormConfig<T extends Record<string, unknown>> {
 	}
 }
 export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<HTMLInputElement> & {
-	name: string
+	name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
 	label?: string | ReactNode
 	type: FieldType
 	placeholder?: string
+	errors?:FieldErrors<T>
 	required?: boolean
 	value?: ((string | number | readonly string[]) & PathValue<T, Path<T>>) | undefined
 	dependency?: {
-		on: string[];
-		condition: (value: DependencyValue<string[]>) => boolean;
+		on: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[];
+		condition: (value: DependencyValue<FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[]>) => boolean;
 	  };
 }
 export type DependencyValue<T extends string[]> = {
@@ -72,4 +75,5 @@ export interface DynamicFormProps<T extends Record<string, unknown>> {
 	id: string
 	config: FormConfig<T>
 	defaultValues?: Partial<T>
+	schema? : ZodType<any, any, any>
 }

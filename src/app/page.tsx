@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { FormConfig } from '@/types/form'
 import { useWatch } from 'react-hook-form'
 import useFormWatch from '@/hooks/use-form-watch'
+import { z } from 'zod'
 
 const formConfig1: FormConfig<any> = {
 	form: {
@@ -29,7 +30,7 @@ const formConfig1: FormConfig<any> = {
 			type: 'email',
 			required: true,
 			placeholder: 'Email',
-			value: 'hello@sadds'
+			value: 'rohit@gmail.com'
 		}
 	]
 }
@@ -38,7 +39,7 @@ const formConfig2: FormConfig<any> = {
 		id: '1',
 		submitText: 'submit',
 		onSubmit: (data) => {
-			console.log('form1', data)
+			console.log('form2', data)
 		}
 	},
 	fields: [
@@ -46,12 +47,11 @@ const formConfig2: FormConfig<any> = {
 			name: 'username',
 			label: 'Username',
 			type: 'text',
-			required: true,
 			placeholder: 'Username',
 			value: 'rohit',
 			dependency: {
 				on : ["email", "email2"], 
-				condition: (value) => value.email === "r" && value.email2 === "r"
+				condition: (value) => value.email === "rohit@gmail.com" && value.email2 === "rohit@gmail.com"
 			}
 		},
 		{
@@ -60,7 +60,7 @@ const formConfig2: FormConfig<any> = {
 			type: 'email',
 			required: true,
 			placeholder: 'Email',
-			value: 'hello@sadds'
+			value: 'rohit@gmail.com',
 		},
 		{
 			name: 'email2',
@@ -68,10 +68,16 @@ const formConfig2: FormConfig<any> = {
 			type: 'email',
 			required: true,
 			placeholder: 'Email2',
-			value: 'hello@sadds'
+			value: 'rohit@gmail.com'
 		}
 	]
 }
+
+const form2Schema = z.object({
+	email: z.string().email(),
+	email2: z.string().email().optional(),
+	username: z.string().min(4)
+  })
 
 const Home = () => {
 	const { forms, getFormValue } = useFormContext()
@@ -97,6 +103,7 @@ const Home = () => {
 			<DynamicForm
 				id='2'
 				config={formConfig2}
+				schema={form2Schema}
 			/>
 		</>
 	)
