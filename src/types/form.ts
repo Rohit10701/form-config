@@ -22,16 +22,17 @@ export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<
 	required?: boolean
 	value?: ((string | number | readonly string[]) & PathValue<T, Path<T>>) | undefined
 	dependency?: {
-		on: string //field name
-		condition :  DependencyCondition<T>
-	}
+		on: string[];
+		condition: (value: DependencyValue<string[]>) => boolean;
+	  };
 }
-
+export type DependencyValue<T extends string[]> = {
+	[K in T[number]]?: string;
+  };
 export interface FieldConfig<T extends Record<string, unknown>> {
 	fields : FieldInput<T>[]
 }
 
-export type DependencyCondition<T extends Record<string, unknown>> = boolean | T extends Record<string, unknown> ? T : never
 export type GenericFieldType = 'text' | 'email' | 'password' | 'number' | 'range'
 export type FieldType =
 	| 'checkbox'

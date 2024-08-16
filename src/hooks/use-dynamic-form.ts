@@ -11,6 +11,7 @@ const useDynamicForm = <T extends Record<string, unknown>>(id: string, config: F
     addForm(id, methods)
   }, [id, methods]);
 
+
   return { ...methods, config };
 };
 
