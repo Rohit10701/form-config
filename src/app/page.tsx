@@ -6,6 +6,7 @@ import { FormConfig } from '@/types/form'
 import { useWatch } from 'react-hook-form'
 import useFormWatch from '@/hooks/use-form-watch'
 import { z } from 'zod'
+import testFormConfig from '@/utils/constant'
 
 const formConfig1: FormConfig<any> = {
 	form: {
@@ -72,6 +73,16 @@ const formConfig2: FormConfig<any> = {
 		}
 	]
 }
+const formConfig3: FormConfig<any> = {
+	form: {
+		id: '1',
+		submitText: 'submit',
+		onSubmit: (data) => {
+			console.log('form2', data)
+		}
+	},
+	fields: [...testFormConfig]
+}
 
 const form2Schema = z.object({
 	email: z.string().email(),
@@ -93,17 +104,17 @@ const Home = () => {
 
 	return (
 		<>
-			<button onClick={() => handleClick('1')}>Click</button>
+			{/* <button onClick={() => handleClick('1')}>Click</button>
 			<DynamicForm
 				id='1'
 				config={formConfig1}
-			/>
+			/> */}
 			<button onClick={() => handleClick('2')}>Click</button>
 
 			<DynamicForm
 				id='2'
-				config={formConfig2}
-				schema={form2Schema}
+				config={formConfig3}
+				// schema={form2Schema}
 			/>
 		</>
 	)

@@ -16,6 +16,10 @@ export interface FormConfig<T extends Record<string, unknown>> {
 		otp?: OTPConfig<T>
 	}
 }
+ export type Option = {
+	label: string;
+	value: string;
+  };
 export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<HTMLInputElement> & {
 	name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
 	label?: string | ReactNode
@@ -23,11 +27,13 @@ export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<
 	placeholder?: string
 	errors?:FieldErrors<T>
 	required?: boolean
-	value?: ((string | number | readonly string[]) & PathValue<T, Path<T>>) | undefined
+	value?:  Option | string[] | ((string | number | readonly string[]) & PathValue<T, Path<T>>) | undefined
 	dependency?: {
 		on: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[];
 		condition: (value: DependencyValue<FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[]>) => boolean;
 	  };
+	option?: Option[]
+	validation? : unknown
 }
 export type DependencyValue<T extends string[]> = {
 	[K in T[number]]?: string;
@@ -36,19 +42,32 @@ export interface FieldConfig<T extends Record<string, unknown>> {
 	fields : FieldInput<T>[]
 }
 
-export type GenericFieldType = 'text' | 'email' | 'password' | 'number' | 'range'
+// export type GenericFieldType = 'text' | 'email' | 'password' | 'number' | 'range'
+// export type FieldType =
+// 	| 'checkbox'
+// 	| 'radio'
+// 	| 'file'
+// 	| 'date'
+// 	| 'textarea'
+// 	| 'phone'
+// 	| 'select'
+// 	| GenericFieldType
+
+
+
 export type FieldType =
-	| 'checkbox'
-	| 'radio'
-	| 'file'
-	| 'date'
-	| 'textarea'
-	| 'phone'
-	| 'select'
-	| GenericFieldType
-
-
-
+  | 'text'
+  | 'textarea'
+  | 'number'
+  | 'select'
+  | 'radio'
+  | 'checkbox'
+  | 'phone'
+  | 'date'
+  | 'time'
+  | 'currency'
+  | 'color'
+  | 'file';
 
 
 

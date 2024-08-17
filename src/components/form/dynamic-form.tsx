@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { Controller, FieldErrors, FieldName, useForm } from 'react-hook-form'
-import Input from '../base/input'
 import { DependencyValue, DynamicFormProps, FieldInput } from '@/types/form'
 import useDynamicForm from '@/hooks/use-dynamic-form'
 import { FieldValuesFromFieldErrors } from '@hookform/error-message'
+import { getFieldComponent } from '../base/_index'
 
 const DynamicForm = <T extends Record<string, unknown>>({
 	id,
@@ -46,6 +46,7 @@ const DynamicForm = <T extends Record<string, unknown>>({
 					acc[fieldName] = watch(fieldName as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>)
 					return acc
 				}, {} as DependencyValue<string[]>)
+				const FieldComponent = getFieldComponent(fieldData.type);
 
 				return (
 					(!fieldData.dependency ||
@@ -55,16 +56,13 @@ const DynamicForm = <T extends Record<string, unknown>>({
 							name={fieldData.name}
 							control={control}
 							render={({ field: controlledField }) => (
-								<Input
+								<FieldComponent
 									{...fieldData}
 									errors={errors}
-									value={controlledField.value}
-									onChange={controlledField.onChange}
-									onBlur={controlledField.onBlur}
-									disabled={controlledField.disabled}
-									name={
-										controlledField.name as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
-									}
+									{...controlledField}
+									onChange={controlledField.onChange as (...event: any[]) => void}
+									name = {controlledField.name as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>}
+									watch={watch}
 								/>
 							)}
 						/>
