@@ -4,13 +4,14 @@ import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-messag
 import { Option } from '@/types/form';
 
 // Define the generic props for the CheckboxInput component
-interface CheckboxInputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
+interface CheckboxInputProps<T extends FieldValues> extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
   label?: string;
   name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>;
   errors?: FieldErrors<T>;
   options: Option[];
-  value?: string[]; 
+  value?: string[];
   required?: boolean;
+  onChange: (value: string[]) => void; // Explicitly define onChange prop
 }
 
 const CheckboxInput = <T extends FieldValues>({
@@ -18,12 +19,21 @@ const CheckboxInput = <T extends FieldValues>({
   errors,
   name,
   options,
-  value = [], 
+  value = [],
   required,
+  onChange,
   ...props
 }: CheckboxInputProps<T>) => {
-  // Ensure value is always treated as an array
   const selectedValues = Array.isArray(value) ? value : [];
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, value: checkboxValue } = e.target;
+    const updatedValue = checked
+      ? [...selectedValues, checkboxValue]
+      : selectedValues.filter((v) => v !== checkboxValue);
+
+    onChange(updatedValue); 
+  };
 
   return (
     <div>
@@ -35,25 +45,8 @@ const CheckboxInput = <T extends FieldValues>({
               type="checkbox"
               id={option.value}
               value={option.value}
-              checked={value.includes(option.value)}
-              onChange={(e) => {
-                const { checked, value: checkboxValue } = e.target;
-                const updatedValue = checked
-                  ? [...value, checkboxValue]
-                  : value.filter((v) => v !== checkboxValue);
-        
-                // Create a new event with updated values
-                const newEvent = {
-                  ...e,
-                  target: {
-                    ...e.target,
-                    value: updatedValue,
-                  },
-                };
-        
-                // Call the onChange prop with the new event
-                props.onChange(newEvent);
-              }}
+              checked={selectedValues.includes(option.value)}
+              onChange={handleCheckboxChange}
               {...props}
             />
             <label htmlFor={option.value}>{option.label}</label>

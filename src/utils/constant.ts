@@ -68,7 +68,7 @@ const testFormConfig : FieldConfig[]= [
 			{ label: 'Checkbox 2', value: 'checkbox2' },
 			{ label: 'Checkbox 3', value: 'checkbox3' },
 		],
-		value: ['checkbox2'],
+		value: ['checkbox3', 'checkbox1'],
 		required: false,
 	},
 	// {
