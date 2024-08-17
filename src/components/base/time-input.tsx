@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TimePicker, { TimePickerProps } from 'react-time-picker';
 
 interface TimeInputProps extends Omit<TimePickerProps, 'onChange' | 'value'> {
@@ -11,9 +11,16 @@ const TimeInput: React.FC<TimeInputProps> = ({
   onChange,
   ...props
 }) => {
+  const [clientValue, setClientValue] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setClientValue(value);
+  }, [value]);
+
   return (
     <TimePicker
-      value={value}
+      className="w-[200px]"
+      value={clientValue}
       onChange={(time) => onChange?.(time)}
       {...props}
     />

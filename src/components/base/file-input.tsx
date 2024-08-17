@@ -1,20 +1,23 @@
+import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
 import React, { InputHTMLAttributes } from 'react';
+import { FieldErrors, FieldName } from 'react-hook-form';
 
-interface FileInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface FileInputProps<T> extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  errors?: string | null;
-}
+  name : FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
+  errors?:  FieldErrors<T>;}
 
-const FileInput: React.FC<FileInputProps> = ({
+const FileInput =  <T, >({
   label,
+  name,
   errors,
   ...props
-}) => {
+}: FileInputProps<T>) => {
   return (
     <div>
-      {label && <label htmlFor={props.name}>{label}</label>}
+      {label && <label htmlFor={name}>{label}</label>}
       <input type="file" {...props} />
-      {errors && <p style={{ color: 'red' }}>{errors}</p>}
+      <ErrorMessage errors={errors} name={name} />
     </div>
   );
 };
