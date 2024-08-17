@@ -67,7 +67,8 @@ export type FieldType =
   | 'time'
   | 'currency'
   | 'color'
-  | 'file';
+  | 'file'
+  | 'url';
 
 
 
@@ -83,7 +84,7 @@ interface StepperConfig {
 		children: StepperConfig
 		skip: boolean
 	}[]
-}
+} 
 
 interface OTPConfig<T extends Record<string, unknown>> {
 	fields: FieldConfig<T>[]

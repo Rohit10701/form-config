@@ -1,5 +1,4 @@
 'use client'
-import DynamicForm from '@/components/form/dynamic-form'
 import { useFormContext } from '@/context/form-context'
 import { useEffect, useState } from 'react'
 import { FormConfig } from '@/types/form'
@@ -7,6 +6,7 @@ import { useWatch } from 'react-hook-form'
 import useFormWatch from '@/hooks/use-form-watch'
 import { z } from 'zod'
 import testFormConfig from '@/utils/constant'
+import DynamicForm from '@/components/form/_index'
 
 const formConfig1: FormConfig<any> = {
 	form: {
