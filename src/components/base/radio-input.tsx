@@ -34,6 +34,7 @@ const RadioInput = <T extends FieldValues>({
               name={name}
               checked={value === option.value}
               required={required}
+              aria-checked={value === option.value}
               {...props}
             />
             <label htmlFor={option.value}>{option.label}</label>

@@ -1,20 +1,21 @@
 import { FieldInput } from '@/types/form';
 import { ErrorMessage } from "@hookform/error-message"
 
-const GenericInput = <T extends Record<string, unknown>>({
+const ReadOnlyInput = <T extends Record<string, unknown>>({
   name,
   label,
+  type,
   errors,
   ...props
 }: FieldInput<T>) => {
   return (
     <>
-      <label id={name} htmlFor={name}>{label}</label>
+      <label htmlFor={name}>{label}</label>
       <input
         id={name}
+        type='name'
+        disabled
         name={name}
-        aria-labelledby={name}
-        aria-roledescription={`input field for ${name}`}
         {...props}
       />
       <ErrorMessage errors={errors} name={name} />
@@ -22,4 +23,4 @@ const GenericInput = <T extends Record<string, unknown>>({
   );
 };
 
-export default GenericInput;
+export default ReadOnlyInput;

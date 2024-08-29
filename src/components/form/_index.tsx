@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { Controller, FieldErrors, FieldName, useForm } from 'react-hook-form'
 import { DependencyValue, DynamicFormProps, FieldInput } from '@/types/form'
 import useDynamicForm from '@/hooks/use-dynamic-form'
@@ -37,16 +37,14 @@ const DynamicForm = <T extends Record<string, unknown>>({
 		config?.form?.onSubmit(data)
 	}
 
-	console.log({ errors })
-
 	return (
 		<form onSubmit={handleSubmit(submitHandler)}>
-			{config.fields?.map((fieldData: FieldInput<T>) => {
+			{config?.fields?.map((fieldData: FieldInput<T>) => {
 				const dependencyValues = fieldData.dependency?.on.reduce((acc, fieldName) => {
 					acc[fieldName] = watch(fieldName as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>)
 					return acc
 				}, {} as DependencyValue<string[]>)
-				const FieldComponent = getFieldComponent(fieldData.type);
+				const FieldComponent = getFieldComponent(fieldData.type)
 
 				return (
 					(!fieldData.dependency ||
@@ -55,16 +53,39 @@ const DynamicForm = <T extends Record<string, unknown>>({
 							key={fieldData.name}
 							name={fieldData.name}
 							control={control}
-							render={({ field: controlledField }) => (
-								<FieldComponent
-									{...fieldData}
-									errors={errors}
-									{...controlledField}
-									onChange={controlledField.onChange as (...event: any[]) => void}
-									name = {controlledField.name as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>}
-									watch={watch}
-								/>
-							)}
+							render={({ field: controlledField }) => {
+								const CustomComponent = fieldData?.component
+
+								return (
+									<>
+										{CustomComponent ? (
+											<CustomComponent
+												{...fieldData}
+												errors={errors}
+												{...controlledField}
+												onChange={controlledField.onChange as (...event: any[]) => void}
+												name={
+													controlledField.name as FieldName<
+														FieldValuesFromFieldErrors<FieldErrors<T>>
+													>
+												}
+											/>
+										) : (
+											<FieldComponent
+												{...fieldData}
+												errors={errors}
+												{...controlledField}
+												onChange={controlledField.onChange as (...event: any[]) => void}
+												name={
+													controlledField.name as FieldName<
+														FieldValuesFromFieldErrors<FieldErrors<T>>
+													>
+												}
+											/>
+										)}
+									</>
+								)
+							}}
 						/>
 					)
 				)

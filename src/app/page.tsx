@@ -69,7 +69,7 @@ const formConfig2: FormConfig<any> = {
 			type: 'email',
 			required: true,
 			placeholder: 'Email2',
-			value: 'rohit@gmail.com'
+			value: ''
 		}
 	]
 }
@@ -86,19 +86,19 @@ const formConfig3: FormConfig<any> = {
 
 const form2Schema = z.object({
 	email: z.string().email(),
-	email2: z.string().email().optional(),
+	// email2: z.string().email().optional(),
 	username: z.string().min(4)
   })
 
 const Home = () => {
 	const { forms, getFormValue } = useFormContext()
-	const value  = useFormWatch("2")
+	// const value  = useFormWatch("2")
 	const handleClick = (id: string) => {
 		const value = getFormValue(id, 'username')
 		console.log({ value })
 	}
 
-	console.log({value})
+	// console.log({value})
 	
 
 
@@ -113,8 +113,8 @@ const Home = () => {
 
 			<DynamicForm
 				id='2'
-				config={formConfig3}
-				// schema={form2Schema}
+				config={formConfig2}
+				schema={form2Schema}
 			/>
 		</>
 	)

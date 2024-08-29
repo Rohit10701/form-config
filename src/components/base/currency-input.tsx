@@ -1,25 +1,24 @@
-import React from 'react';
-import NumberFormat, { NumberFormatPropsBase } from 'react-number-format';
+import { FieldValuesFromFieldErrors } from '@hookform/error-message'
+import React from 'react'
+import CurrencyInput, { CurrencyInputOnChangeValues } from 'react-currency-input-field'
+import { FieldErrors, FieldName } from 'react-hook-form'
 
-interface CurrencyInputProps extends Omit<NumberFormatPropsBase<string>, 'onValueChange' | 'value'> {
-  value?: string | number;
-  onChange?: (value: string) => void;
+interface CurrencyInputProps<T> {
+	name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
+	onChange?: (value:string) => void
 }
 
-const CurrencyInput: React.FC<CurrencyInputProps> = ({
-  value,
-  onChange,
-  ...props
-}) => {
-  return (
-    <NumberFormat
-      value={value}
-      onValueChange={(values) => onChange?.(values.value)}
-      thousandSeparator={true}
-      prefix={'$'}
-      {...props}
-    />
-  );
-};
+const CurrencyCustomInput = <T, > ({ name, onChange, ...props } : CurrencyInputProps<T>) => {
+	return (
+		<>
+			<CurrencyInput
+				id={name}
+				name={name}
+				onValueChange={(value)=>onChange(value)}
+				{...props}
+			/>
+		</>
+	)
+}
 
-export default CurrencyInput;
+export default CurrencyCustomInput

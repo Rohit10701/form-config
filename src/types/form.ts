@@ -1,6 +1,6 @@
 import { FieldValuesFromFieldErrors } from '@hookform/error-message'
 import React, { InputHTMLAttributes, ReactNode } from 'react'
-import { FieldErrors, FieldName, Path, PathValue } from 'react-hook-form'
+import { FieldErrors, FieldName, Path, PathValue } from 'react-hook-form' 
 import { ZodType } from 'zod'
 
 export interface FormConfig<T extends Record<string, unknown>> {
@@ -34,6 +34,7 @@ export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<
 	  };
 	option?: Option[]
 	validation? : unknown
+	component? : React.FC<any>
 }
 export type DependencyValue<T extends string[]> = {
 	[K in T[number]]?: string;

@@ -19,6 +19,14 @@ const testFormConfig : FieldConfig[]= [
 		required: true,
 	},
 	{
+		name: 'readOnly',
+		label: 'read only',
+		type: 'readonly',
+		placeholder: 'Enter text',
+		value: 'Sample text',
+		required: true,
+	},
+	{
 		name: 'textareaField',
 		label: 'Textarea Field',
 		type: 'textarea',
@@ -84,25 +92,25 @@ const testFormConfig : FieldConfig[]= [
 		label: 'Date Field',
 		type: 'date',
 		placeholder: 'Select date',
-		value: ['2023-08-15', '2023-08-27'],
+		value: '2023-08-27',
 		required: true,
 	},
-	// {
-	// 	name: 'timeField',
-	// 	label: 'Time Field',
-	// 	type: 'time',
-	// 	placeholder: 'Select time',
-	// 	value: '14:30',
-	// 	required: true,
-	// },
-	// {
-	// 	name: 'currencyField',
-	// 	label: 'Currency Field',
-	// 	type: 'currency',
-	// 	placeholder: 'Enter amount',
-	// 	value: 100.50,
-	// 	required: true,
-	// },
+	{
+		name: 'timeField',
+		label: 'Time Field',
+		type: 'time',
+		placeholder: 'Select time',
+		value: '14:30',
+		required: true,
+	},
+	{
+		name: 'currencyField',
+		label: 'Currency Field',
+		type: 'currency',
+		placeholder: 'Enter amount',
+		value: 23213,
+		required: true,
+	},
 	{
 		name: 'colorField',
 		label: 'Color Picker',
@@ -110,13 +118,13 @@ const testFormConfig : FieldConfig[]= [
 		value: '#ff5733',
 		required: true,
 	},
-	// {
-	// 	name: 'fileField',
-	// 	label: 'File Upload',
-	// 	type: 'file',
-	// 	placeholder: 'Upload file',
-	// 	required: true,
-	// },
+	{
+		name: 'fileField',
+		label: 'File Upload',
+		type: 'file',
+		placeholder: 'Upload file',
+		required: true,
+	},
 ];
 
 export default testFormConfig;

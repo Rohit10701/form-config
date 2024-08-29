@@ -47,6 +47,7 @@ const CheckboxInput = <T extends FieldValues>({
               value={option.value}
               checked={selectedValues.includes(option.value)}
               onChange={handleCheckboxChange}
+              aria-checked={selectedValues.includes(option.value)}
               {...props}
             />
             <label htmlFor={option.value}>{option.label}</label>
