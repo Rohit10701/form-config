@@ -9,6 +9,7 @@ const GenericInput = <T extends Record<string, unknown>>({
   className,
   ...props
 }: FieldInput<T>) => {
+  // console.log({...props})
   return (
     <div className="mb-6"> {/* Add margin at the bottom for spacing */}
       <label 

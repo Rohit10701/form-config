@@ -59,7 +59,7 @@ export const getGridStyles = (layout = {
     return acc;
   }, {});
 
-  console.log({responsiveStyles})
+  // console.log({responsiveStyles})
   // Merge base styles with responsive styles
   return {
     ...styles,

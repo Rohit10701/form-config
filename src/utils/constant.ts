@@ -18,14 +18,14 @@ const testFormConfig : FieldConfig[]= [
 		value: 'Sample text',
 		required: true,
 	},
-	{
-		name: 'readOnly',
-		label: 'read only',
-		type: 'readonly',
-		placeholder: 'Enter text',
-		value: 'Sample text',
-		required: true,
-	},
+	// {
+	// 	name: 'readOnly',
+	// 	label: 'read only',
+	// 	type: 'readonly',
+	// 	placeholder: 'Enter text',
+	// 	value: 'Sample text',
+	// 	required: true,
+	// },
 	{
 		name: 'textareaField',
 		label: 'Textarea Field',

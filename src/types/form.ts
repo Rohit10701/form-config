@@ -86,6 +86,7 @@ export type FieldType =
   | 'currency'
   | 'color'
   | 'file'
+  | 'readonly'
   | 'url';
 
 
@@ -114,5 +115,5 @@ export interface DynamicFormProps<T extends Record<string, unknown>> {
 	config: FormConfig<T>
 	defaultValues?: Partial<T>
 	schema? : ZodType<any, any, any>
-	
+
 }
