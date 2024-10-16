@@ -2,6 +2,7 @@ import { Option } from '@/types/form';
 import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
 import React, { InputHTMLAttributes } from 'react';
 import { FieldErrors, FieldValues, FieldName } from 'react-hook-form';
+import { cn } from '@/utils/helpers'; // Ensure cn is imported
 
 interface RadioInputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -19,14 +20,19 @@ const RadioInput = <T extends FieldValues>({
   options,
   value,
   required,
+  className,
   ...props
 }: RadioInputProps<T>) => {
   return (
-    <div>
-      {label && <label>{label}</label>}
-      <div>
+    <div className={cn("mb-6", className)}> 
+      {label && (
+        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          {label}
+        </label>
+      )}
+      <div className="flex flex-col">
         {options.map((option) => (
-          <div key={option.value}>
+          <div key={option.value} className="flex items-center mb-2">
             <input
               type="radio"
               id={option.value}
@@ -35,13 +41,16 @@ const RadioInput = <T extends FieldValues>({
               checked={value === option.value}
               required={required}
               aria-checked={value === option.value}
+              className="h-4 w-4  text-blue-600 border-gray-300 focus:ring-blue-500 dark:accent-gray-700 dark:border-gray-600"
               {...props}
             />
-            <label htmlFor={option.value}>{option.label}</label>
+            <label htmlFor={option.value} className="ml-2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+              {option.label}
+            </label>
           </div>
         ))}
       </div>
-      <ErrorMessage errors={errors} name={name} />
+      {errors && <ErrorMessage errors={errors} name={name}/>}
     </div>
   );
 };

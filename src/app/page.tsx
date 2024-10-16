@@ -99,9 +99,6 @@ const Home = () => {
 	}
 
 	// console.log({value})
-	
-
-
 	return (
 		<>
 			{/* <button onClick={() => handleClick('1')}>Click</button>
@@ -113,8 +110,9 @@ const Home = () => {
 
 			<DynamicForm
 				id='2'
-				config={formConfig2}
+				config={formConfig3}
 				schema={form2Schema}
+				darkMode={true}
 			/>
 		</>
 	)

@@ -95,14 +95,14 @@ const testFormConfig : FieldConfig[]= [
 		value: '2023-08-27',
 		required: true,
 	},
-	{
-		name: 'timeField',
-		label: 'Time Field',
-		type: 'time',
-		placeholder: 'Select time',
-		value: '14:30',
-		required: true,
-	},
+	// {
+	// 	name: 'timeField',
+	// 	label: 'Time Field',
+	// 	type: 'time',
+	// 	placeholder: 'Select time',
+	// 	value: '14:30',
+	// 	required: true,
+	// },
 	{
 		name: 'currencyField',
 		label: 'Currency Field',

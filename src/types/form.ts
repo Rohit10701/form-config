@@ -15,6 +15,7 @@ export interface FormConfig<T extends Record<string, unknown>> {
 		stepper?: StepperConfig
 		otp?: OTPConfig<T>
 	}
+
 }
  export type Option = {
 	label: string;
@@ -25,6 +26,8 @@ export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<
 	label?: string | ReactNode
 	type: FieldType
 	placeholder?: string
+	style?:React.CSSProperties
+	className?: string
 	errors?:FieldErrors<T>
 	required?: boolean
 	value?:  Option | string[] | ((string | number | readonly string[]) & PathValue<T, Path<T>>) | undefined
@@ -35,6 +38,20 @@ export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<
 	option?: Option[]
 	validation? : unknown
 	component? : React.FC<any>
+	styles?: {
+		container?: React.CSSProperties;
+		input?: React.CSSProperties;
+		label?: React.CSSProperties;
+		error?: React.CSSProperties;
+	  };
+	customClassName?: {
+		container?: string;
+		input?: string;
+		label?: string;
+		error?: string;
+	  };
+	columns?: number;
+	rows?: number;
 }
 export type DependencyValue<T extends string[]> = {
 	[K in T[number]]?: string;
@@ -97,4 +114,5 @@ export interface DynamicFormProps<T extends Record<string, unknown>> {
 	config: FormConfig<T>
 	defaultValues?: Partial<T>
 	schema? : ZodType<any, any, any>
+	
 }
