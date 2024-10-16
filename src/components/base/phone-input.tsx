@@ -34,8 +34,8 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ value, onChange,sea
 		  margin: '0px',
           height: '40px',
           width: '100%',
-		  paddingLeft: "3.5rem",
           padding: '0.625rem',
+		  paddingLeft: "3rem",
           ...inputStyle,
         }}
         buttonStyle={{

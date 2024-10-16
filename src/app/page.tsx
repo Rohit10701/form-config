@@ -5,8 +5,8 @@ import { FormConfig } from '@/types/form'
 import { useWatch } from 'react-hook-form'
 import useFormWatch from '@/hooks/use-form-watch'
 import { z } from 'zod'
-import testFormConfig from '@/utils/constant'
 import DynamicForm from '@/components/form/_index'
+import testFormConfig from '@/utils/constant'
 
 const formConfig1: FormConfig<any> = {
 	form: {

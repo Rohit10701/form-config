@@ -1,15 +1,15 @@
 import React, { InputHTMLAttributes, useState, useEffect } from 'react';
-import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
+import { ErrorMessage } from '@hookform/error-message';
 import { FieldErrors, FieldName } from 'react-hook-form';
 
 interface FileInputProps<T> extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>;
+  name: FieldName<T>;
   errors?: FieldErrors<T>;
   mode?: 'priority' | 'lazy';
   onUpload?: (file: File) => Promise<string>;
   allowedExtensions?: string[];
-  value?: string;
+  value?: string | null;
   onDelete?: () => void;
 }
 
@@ -22,14 +22,13 @@ const FileInput = <T,>({
   allowedExtensions = [],
   value,
   onDelete,
-  
   ...props
 }: FileInputProps<T>) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(value || null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(value);
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    setPreviewUrl(value || null);
+    setPreviewUrl(value);
   }, [value]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +40,6 @@ const FileInput = <T,>({
     }
 
     setFile(selectedFile);
-    console.log({selectedFile})
     if (selectedFile) {
       const objectUrl = URL.createObjectURL(selectedFile);
       setPreviewUrl(objectUrl);
@@ -59,13 +57,12 @@ const FileInput = <T,>({
   const isFileExtensionAllowed = (file: File) => {
     if (allowedExtensions.length === 0) return true; // Allow all if no specific extensions are defined
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    return allowedExtensions.includes(fileExtension || '');
+    return fileExtension ? allowedExtensions.includes(fileExtension) : false;
   };
-
 
   const handleDelete = () => {
     setFile(null);
-    setPreviewUrl(value || null);
+    setPreviewUrl(null); // Clear preview URL when deleted
     if (onDelete) {
       onDelete();
     }

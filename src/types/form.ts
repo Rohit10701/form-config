@@ -35,7 +35,7 @@ export type FieldInput<T extends Record<string, unknown>> = InputHTMLAttributes<
 		on: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[];
 		condition: (value: DependencyValue<FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[]>) => boolean;
 	  };
-	option?: Option[]
+	options?: Option[]
 	validation? : unknown
 	component? : React.FC<any>
 	styles?: {
