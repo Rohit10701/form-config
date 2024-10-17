@@ -11,6 +11,8 @@ export type FieldConfig = {
 	options?: Option[]
 }
 
+
+// TODO : check for uniqueness for the name
 const testFormConfig: FieldInput<Record<string, unknown>>[] = [
 	{
 		name: 'textField',
@@ -18,7 +20,8 @@ const testFormConfig: FieldInput<Record<string, unknown>>[] = [
 		type: 'text',
 		placeholder: 'Enter text',
 		value: 'Sample text',
-		required: true
+		required: true,
+
 	},
 	{
 		name: 'readOnly',
@@ -54,7 +57,7 @@ const testFormConfig: FieldInput<Record<string, unknown>>[] = [
 			{ label: 'Option 3', value: 'option3' }
 		],
 		placeholder: 'slec',
-		// value: 'option2',
+		value: 'option2',
 		required: true
 	},
 	{
@@ -78,7 +81,7 @@ const testFormConfig: FieldInput<Record<string, unknown>>[] = [
 			{ label: 'Checkbox 2', value: 'checkbox2' },
 			{ label: 'Checkbox 3', value: 'checkbox3' }
 		],
-		value: ['checkbox3', 'checkbox1'],
+		value: ['checkbox3', 'checkbox2'],
 		required: false
 	},
 	{
@@ -93,7 +96,18 @@ const testFormConfig: FieldInput<Record<string, unknown>>[] = [
 		name: 'ExternalInput',
 		label: 'External Input',
 		type: 'text',
+		placeholder: 'This is from MUI',
 		component: Input,
+		required: true,
+		className:"bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
+	},
+	{
+		name: 'ExternalInput2',
+		label: 'External Input',
+		type: 'text',
+		placeholder: 'This is from MUI',
+		component: Input,
+		required: true,
 		className:"bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white",
 	},
 	{
@@ -102,7 +116,11 @@ const testFormConfig: FieldInput<Record<string, unknown>>[] = [
 		type: 'date',
 		placeholder: 'Select date',
 		value: '2023-08-27',
-		required: true
+		required: true,
+		dependency: {
+			on : ["checkboxField"], 
+			condition: (value) =>  value?.checkboxField?.includes("checkbox1") && value?.checkboxField?.includes("checkbox3")
+		}
 	},
 	// {
 	// 	name: 'timeField',

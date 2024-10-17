@@ -44,17 +44,7 @@ const formConfig2: FormConfig<any> = {
 		}
 	},
 	fields: [
-		{
-			name: 'username',
-			label: 'Username',
-			type: 'text',
-			placeholder: 'Username',
-			value: 'rohit',
-			dependency: {
-				on : ["email", "email2"], 
-				condition: (value) => value.email === "rohit@gmail.com" && value.email2 === "rohit@gmail.com"
-			}
-		},
+		
 		{
 			name: 'email',
 			label: 'Email',
@@ -67,10 +57,22 @@ const formConfig2: FormConfig<any> = {
 			name: 'email2',
 			label: 'Email2',
 			type: 'email',
-			required: true,
+			required: false,
 			placeholder: 'Email2',
 			value: ''
-		}
+		},
+		{
+			name: 'username',
+			label: 'Username',
+			type: 'text',
+			placeholder: 'Username',
+			value: 'rohit',
+			required: true,
+			dependency: {
+				on : ["email", "email2"], 
+				condition: (value) => value.email === "rohit@gmail.com" && value.email2 === "a"
+			}
+		},
 	]
 }
 const formConfig3: FormConfig<any> = {
@@ -92,6 +94,11 @@ const form2Schema = z.object({
 
 const Home = () => {
 	const { forms, getFormValue } = useFormContext()
+	const [toggleDark, setToggleDark] = useState(false)
+
+	const toggleHandler = ()  => {
+		setToggleDark(!toggleDark)
+	}
 	// const value  = useFormWatch("2")
 	const handleClick = (id: string) => {
 		const value = getFormValue(id, 'username')
@@ -106,12 +113,12 @@ const Home = () => {
 				id='1'
 				config={formConfig1}
 			/> */}
-			<button onClick={() => handleClick('2')}>Click</button>
+			<button onClick={toggleHandler}>Toogle theme</button>
 
 			<DynamicForm
 				id='2'
 				config={formConfig3}
-f				darkMode={true}
+				darkMode={toggleDark}
 			/>
 		</>
 	)

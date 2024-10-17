@@ -26,10 +26,8 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 		formState: { errors }
 	} = useDynamicForm<T>(id, config, schema)
 
-	// Extract default values from config fields
 	useEffect(() => {
 		const defaultValues = config.fields?.reduce((acc, field) => {
-			// Ensure field.value exists and is included in the defaultValues
 			if ('value' in field) {
 				acc[field.name as keyof T] = field.value
 			}
@@ -118,9 +116,9 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 					)
 				})}
 			</div>
-      <div className='flex justify-end'>
-			<button type='submit'>{config?.form?.submitText}</button>
-      </div>
+			<div className='flex justify-end'>
+				<button type='submit'>{config?.form?.submitText}</button>
+			</div>
 		</form>
 	)
 }

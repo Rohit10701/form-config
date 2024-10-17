@@ -77,6 +77,7 @@ export type FieldType =
   | 'text'
   | 'textarea'
   | 'number'
+  | 'email'
   | 'select'
   | 'radio'
   | 'checkbox'
