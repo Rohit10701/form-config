@@ -1,10 +1,10 @@
 import React, { InputHTMLAttributes, useState, useEffect } from 'react';
-import { ErrorMessage } from '@hookform/error-message';
+import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
 import { FieldErrors, FieldName } from 'react-hook-form';
 
 interface FileInputProps<T> extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  name: FieldName<T>;
+  name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
   errors?: FieldErrors<T>;
   mode?: 'priority' | 'lazy';
   onUpload?: (file: File) => Promise<string>;

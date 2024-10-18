@@ -20,6 +20,7 @@ const SelectInput = <T,>({
   className,
   ...props
 }: SelectInputProps<T>) => {
+ 
   return (
     <div className="mb-6"> {/* Added margin bottom for spacing */}
       {label && (

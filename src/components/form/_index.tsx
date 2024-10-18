@@ -43,11 +43,13 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 		config?.form?.onSubmit(data)
 	}
 
+	console.log("rendered!")
 	return (
 		<form
 			id={id || 'form'}
 			onSubmit={handleSubmit(submitHandler)}>
 			<div
+				data-testid={id || "test-form"}
 				className={cn(
 					'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 bg-white dark:bg-slate-600',
 					`${darkMode ? ' dark ' : ''}`,
@@ -71,12 +73,15 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 								control={control}
 								render={({ field: controlledField }) => {
 									const CustomComponent = fieldData?.component
+									const { ref, value, ...rest } = controlledField;
 									return (
 										<div>
 											{CustomComponent ? (
 												<CustomComponent
+													value={value || ""}
 													{...fieldData}
-													{...controlledField}
+													{...rest}
+													
 													errors={errors}
 													onChange={controlledField.onChange as (...event: any[]) => void}
 													name={
@@ -93,7 +98,8 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 											) : (
 												<FieldComponent
 													{...fieldData}
-													{...controlledField}
+													value={value || ""}
+													{...rest}
 													errors={errors}
 													onChange={controlledField.onChange as (...event: any[]) => void}
 													name={

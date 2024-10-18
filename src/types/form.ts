@@ -11,10 +11,10 @@ export interface FormConfig<T extends Record<string, unknown>> {
 	}
 	// formType?: 'simple' | 'stepper' | 'otp'
 	fields?: FieldInput<T>[]
-	options?: {
-		stepper?: StepperConfig
-		otp?: OTPConfig<T>
-	}
+	// options?: {
+	// 	stepper?: StepperConfig
+	// 	otp?: OTPConfig<T>
+	// }
 
 }
  export type Option = {

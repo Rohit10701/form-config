@@ -24,6 +24,7 @@ const DateInput: React.FC<DateInputProps> = ({ name, value, onChange, className,
 					{label}
 				</label>
 			)}{' '}
+			{/* @ts-ignore */}
 			<DatePicker
       name={name}
 				selected={Array.isArray(value) ? value[0] : value} // Handle single date selection

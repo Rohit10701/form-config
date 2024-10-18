@@ -117,7 +117,7 @@ const Home = () => {
 
 			<DynamicForm
 				id='2'
-				config={formConfig3}
+				config={formConfig2}
 				darkMode={toggleDark}
 			/>
 		</>

@@ -1,0 +1,154 @@
+import DynamicForm from '@/components/form/_index'
+import { FormProvider } from '@/context/form-context'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { describe } from 'node:test'
+import { z } from 'zod'
+
+// Mock form configurations
+const formConfig = {
+	form: {
+		id: 'test-form',
+		submitText: 'Submit',
+		onSubmit: jest.fn() // Mock submit handler
+	},
+	fields: [
+		{
+			name: 'username',
+			label: 'Username',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter username'
+		},
+		{ name: 'email', label: 'Email', type: 'email', required: true, placeholder: 'Enter email' }
+	]
+}
+
+// Mock schema
+const schema = z.object({
+	username: z.string().min(4),
+	email: z.string().email()
+})
+
+describe('Dynamic Form Component', () => {
+	test('render the component with correct config', () => {
+		render(
+			<FormProvider>
+				<DynamicForm
+					id='test-form'
+					config={formConfig}
+					schema={schema}
+				/>
+			</FormProvider>
+		)
+
+		// fields are rendered properly
+		expect(screen.getByPlaceholderText('Enter username')).toBeInTheDocument()
+		expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument()
+		expect(screen.getByText('Submit')).toBeInTheDocument()
+	})
+
+	test('submit form data correctly', async () => {
+		render(
+			<FormProvider>
+				<DynamicForm
+					id='test-form'
+					config={formConfig}
+					schema={schema}
+				/>
+			</FormProvider>
+		)
+
+		// simulate user input
+		fireEvent.change(screen.getByPlaceholderText('Enter username'), {
+			target: { value: 'JohnDoe' }
+		})
+		fireEvent.change(screen.getByPlaceholderText('Enter email'), {
+			target: { value: 'john@example.com' }
+		})
+
+		// user submission
+		fireEvent.click(screen.getByText('Submit'))
+		await waitFor(() => {
+			expect(formConfig.form.onSubmit).toHaveBeenCalled()
+		})
+		expect(formConfig.form.onSubmit).toHaveBeenCalled()
+		expect(formConfig.form.onSubmit).toHaveBeenCalledWith({
+			username: 'JohnDoe',
+			email: 'john@example.com'
+		})
+		expect(formConfig.form.onSubmit).not.toHaveBeenCalledWith({
+			username: 'John Doi',
+			email: 'john@example.com'
+		})
+	})
+
+	test('test for the dependency rendering', () => {
+		const dependentFormConfig = {
+			...formConfig,
+			fields: [
+				...formConfig.fields,
+				{
+					name: 'email2',
+					label: 'Email2',
+					type: 'email',
+					required: false,
+					placeholder: 'Enter email 2',
+					dependency: {
+						on: ['email'],
+						condition: (value) => value.email === 'trigger@example.com'
+					}
+				}
+			]
+		}
+		render(
+			<FormProvider>
+				<DynamicForm
+					id='test-form'
+					config={dependentFormConfig}
+					schema={schema}
+				/>
+			</FormProvider>
+		)
+
+		// until dependency condition is true email2 input field won't get rendered
+		expect(screen.queryByPlaceholderText('Enter email 2')).toBeNull()
+
+		// enter the email "trigger@example.com" in email field
+		fireEvent.change(screen.getByPlaceholderText('Enter email'), {
+			target: { value: 'trigger@example.com' }
+		})
+		expect(screen.getByPlaceholderText('Enter email')).toHaveValue('trigger@example.com')
+		expect(screen.getByPlaceholderText('Enter email 2')).toBeInTheDocument()
+	})
+
+	test('toggles dark mode correctly', () => {
+		const { rerender } = render(
+			<FormProvider>
+				<DynamicForm
+					id='test-form'
+					config={formConfig}
+					schema={schema}
+					darkMode={false}
+				/>
+			</FormProvider>
+		)
+
+		// expect dark mode to be off initially
+		expect(screen.getByTestId('test-form')).not.toHaveClass('dark')
+
+		// Re-render with darkMode enabled
+		rerender(
+			<FormProvider>
+				<DynamicForm
+					id='test-form'
+					config={formConfig}
+					schema={schema}
+					darkMode={true}
+				/>
+			</FormProvider>
+		)
+
+		// Expect dark mode to be applied
+		expect(screen.getByTestId('test-form')).toHaveClass('dark')
+	})
+})
