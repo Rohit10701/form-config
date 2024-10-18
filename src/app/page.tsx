@@ -121,8 +121,8 @@ const Home = () => {
 
 			<DynamicForm
 				id='2'
-				config={formConfig2}
-				schema={form2Schema}
+				config={formConfig3}
+				// schema={form2Schema}
 				darkMode={toggleDark}
 			/>
 		</>

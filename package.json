@@ -32,6 +32,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@storybook/nextjs": "^8.3.6",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^16.0.1",
