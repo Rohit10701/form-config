@@ -44,20 +44,18 @@ const formConfig2: FormConfig<any> = {
 		}
 	},
 	fields: [
-		
 		{
 			name: 'email',
 			label: 'Email',
 			type: 'email',
 			required: true,
 			placeholder: 'Email',
-			value: 'rohit@gmail.com',
+			value: 'rohit@gmail.com'
 		},
 		{
 			name: 'email2',
 			label: 'Email2',
 			type: 'email',
-			required: false,
 			placeholder: 'Email2',
 			value: ''
 		},
@@ -69,10 +67,10 @@ const formConfig2: FormConfig<any> = {
 			value: 'rohit',
 			required: true,
 			dependency: {
-				on : ["email", "email2"], 
+				on : ["email", "email2"],
 				condition: (value) => value.email === "rohit@gmail.com" && value.email2 === "a"
 			}
-		},
+		}
 	]
 }
 const formConfig3: FormConfig<any> = {
@@ -88,15 +86,15 @@ const formConfig3: FormConfig<any> = {
 
 const form2Schema = z.object({
 	email: z.string().email(),
-	// email2: z.string().email().optional(),
-	username: z.string().min(4)
-  })
+	email2: z.string().email().optional().or(z.literal('')),
+	username: z.string().min(4).optional()
+})
 
 const Home = () => {
 	const { forms, getFormValue } = useFormContext()
 	const [toggleDark, setToggleDark] = useState(false)
 
-	const toggleHandler = ()  => {
+	const toggleHandler = () => {
 		setToggleDark(!toggleDark)
 	}
 	// const value  = useFormWatch("2")
@@ -105,6 +103,12 @@ const Home = () => {
 		console.log({ value })
 	}
 
+	const result = form2Schema.safeParse({
+		email: 'test@example.com',
+		email2: ''
+	})
+
+	console.log(result)
 	// console.log({value})
 	return (
 		<>
@@ -118,6 +122,7 @@ const Home = () => {
 			<DynamicForm
 				id='2'
 				config={formConfig2}
+				schema={form2Schema}
 				darkMode={toggleDark}
 			/>
 		</>
