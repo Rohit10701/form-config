@@ -3,17 +3,18 @@ import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-messag
 import React, { InputHTMLAttributes } from 'react';
 import { FieldErrors, FieldValues, FieldName } from 'react-hook-form';
 import { cn } from '@/utils/helpers'; 
+import ErrorField from './error-field';
 
-interface RadioInputProps<T extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
+interface RadioInputProps<T extends Record<string, unknown>> extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>;
+  name: Extract<keyof T, string>;
   errors?: FieldErrors<T>;
   options: Option[];
   value?: string;
   required?: boolean;
 }
 
-const RadioInput = <T extends FieldValues>({
+const RadioInput = <T extends Record<string, unknown>>({
   label,
   errors,
   name,
@@ -50,7 +51,7 @@ const RadioInput = <T extends FieldValues>({
           </div>
         ))}
       </div>
-      {errors && <ErrorMessage errors={errors} name={name}/>}
+      {errors && <ErrorField errors={errors} name={name}/>}
     </div>
   );
 };

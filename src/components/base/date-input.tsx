@@ -2,17 +2,20 @@ import { cn } from '@/utils/helpers'
 import React from 'react'
 import DatePicker, { DatePickerProps } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import ErrorField from './error-field'
+import { FieldErrors } from 'react-hook-form'
 
-interface DateInputProps {
+interface DateInputProps  <T extends Record<string, unknown>>{
 	value?: Date | [Date, Date]
 	onChange?: (date: Date | [Date, Date] | null) => void
 	className?: string
 	label?: string
   wrapperClassName? :string,
-  name?: string
+  name: Extract<keyof T, string>;
+  errors?:FieldErrors<T>;
 }
 
-const DateInput: React.FC<DateInputProps> = ({ name, value, onChange, className, wrapperClassName, label, ...props }) => {
+const DateInput: React.FC<DateInputProps<{}>> = ({ name, value, onChange, className, wrapperClassName, label, errors, ...props }) => {
 	return (
 		<div className='mb-6'>
 			{label && (
@@ -40,6 +43,8 @@ const DateInput: React.FC<DateInputProps> = ({ name, value, onChange, className,
 				)}
 				{...props}
 			/>
+			      {errors && <ErrorField errors={errors} name={name} />}
+
 		</div>
 	)
 }

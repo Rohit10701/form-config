@@ -2,16 +2,17 @@ import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-messag
 import React, { SelectHTMLAttributes } from 'react';
 import { FieldErrors, FieldName } from 'react-hook-form';
 import { cn } from '@/utils/helpers'; 
+import ErrorField from './error-field';
 
-interface SelectInputProps<T> extends SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectInputProps<T extends Record<string, unknown>> extends SelectHTMLAttributes<HTMLSelectElement> {
   placeholder: string;
   label?: string;
-  name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>;
+  name: Extract<keyof T, string>
   options: { value: string; label: string }[];
   errors?: FieldErrors<T>;
 }
 
-const SelectInput = <T,>({
+const SelectInput = <T extends Record<string, unknown>>({
   name,
   label,
   options,
@@ -41,7 +42,7 @@ const SelectInput = <T,>({
           </option>
         ))}
       </select>
-      {errors && <ErrorMessage errors={errors} name={name}/>}
+      {errors && <ErrorField errors={errors} name={name}/>}
     </div>
   );
 };

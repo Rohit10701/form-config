@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChromePicker, ChromePickerProps } from 'react-color';
 
-interface ColorInputProps extends Omit<ChromePickerProps, 'onChangeComplete' | 'color'> {
+interface ColorInputProps extends Omit<ChromePickerProps, 'onChange'> {
   value?: string;
   onChange?: (color: string) => void;
 }

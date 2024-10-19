@@ -1,6 +1,6 @@
 import { FieldValuesFromFieldErrors } from '@hookform/error-message'
-import React, { InputHTMLAttributes, ReactNode } from 'react'
-import { FieldErrors, FieldName, Path, PathValue } from 'react-hook-form'
+import React, { ComponentType, InputHTMLAttributes, ReactNode } from 'react'
+import { FieldErrors, FieldName, FieldValues, Path, PathValue } from 'react-hook-form'
 import { ZodType } from 'zod'
 
 export interface FormConfig<T extends Record<string, unknown>> {
@@ -9,12 +9,7 @@ export interface FormConfig<T extends Record<string, unknown>> {
 		submitText: ReactNode | string
 		onSubmit: (data: T) => void
 	}
-	// formType?: 'simple' | 'stepper' | 'otp'
-	fields?: FieldInput<T>[]
-	// options?: {
-	// 	stepper?: StepperConfig
-	// 	otp?: OTPConfig<T>
-	// }
+	fields: FieldInput<T>[]
 }
 
 export interface DynamicFormProps<T extends Record<string, unknown>> {
@@ -29,51 +24,29 @@ export type Option = {
 	value: string
 }
 
-export type FieldInput<T extends Record<string, unknown>> =
-	InputHTMLAttributes<HTMLInputElement> & {
-		name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
-		label?: string | ReactNode
-		type: FieldType
-		placeholder?: string
-		style?: React.CSSProperties
-		className?: string
-		errors?: FieldErrors<T>
-		required?: boolean
-		value?:
-			| Option
-			| string[]
-			| ((string | number | readonly string[]) & PathValue<T, Path<T>>)
-			| undefined
+export type FieldInput<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & {
+	name: keyof T
+	errors?: FieldErrors<T>
+	value?:
+		| Option
+		| string[]
+		| ((string | number | readonly string[]) & PathValue<T, Path<T>>)
 		dependency?: {
-			on: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[]
-			condition: (
-				value: DependencyValue<FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>[]>
-			) => boolean
+			on: (keyof T)[]
+			condition: (value: Partial<T>) => boolean
 		}
-		options?: Option[]
-		validation?: unknown
-		component?: React.FC<any>
-		styles?: {
-			container?: React.CSSProperties
-			input?: React.CSSProperties
-			label?: React.CSSProperties
-			error?: React.CSSProperties
-		}
-		customClassName?: {
-			container?: string
-			input?: string
-			label?: string
-			error?: string
-		}
-		columns?: number
-		rows?: number
-	}
+	label?: string | ReactNode
+	type: FieldType
+	placeholder?: string
+	className?: string 
+	required?: boolean
+	options?: Option[]
+	component?: ComponentType<any> | keyof JSX.IntrinsicElements;
+	styles?: React.CSSProperties
+}
 
 export type DependencyValue<T extends string[]> = {
 	[K in T[number]]?: string
-}
-export interface FieldConfig<T extends Record<string, unknown>> {
-	fields: FieldInput<T>[]
 }
 
 export type GenericFieldType = 'text' | 'email' | 'password' | 'number' | 'range'
@@ -85,7 +58,20 @@ export type FieldType =
 	| 'textarea'
 	| 'phone'
 	| 'select'
+	| 'readonly'
 	| GenericFieldType
+
+
+	
+
+
+
+
+
+
+
+
+
 
 
 
@@ -121,4 +107,18 @@ export type FieldType =
 
 // interface OTPConfig<T extends Record<string, unknown>> {
 // 	fields: FieldConfig<T>[]
+// }
+
+// export interface FormConfig<T extends Record<string, unknown>> {
+// 	form: {
+// 		id: string
+// 		submitText: ReactNode | string
+// 		onSubmit: (data: T) => void
+// 	}
+// 	// formType?: 'simple' | 'stepper' | 'otp'
+// 	fields?: FieldInput<T>[]
+// 	// options?: {
+// 	// 	stepper?: StepperConfig
+// 	// 	otp?: OTPConfig<T>
+// 	// }
 // }

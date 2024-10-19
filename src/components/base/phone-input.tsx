@@ -2,20 +2,23 @@ import { cn } from '@/utils/helpers';
 import React from 'react';
 import PhoneInput, { CountryData, PhoneInputProps } from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import ErrorField from './error-field';
+import { FieldErrors } from 'react-hook-form';
 
-interface PhoneNumberInputProps extends Omit<PhoneInputProps, 'onChange'> {
+interface PhoneNumberInputProps<T extends Record<string, unknown>> extends Omit<PhoneInputProps, 'onChange'> {
   value?: string;
+  name: Extract<keyof T, string>;
   onChange?: (value: unknown) => void;
   inputStyle?: React.CSSProperties;
   dropdownStyle?:React.CSSProperties;
   buttonStyle?:React.CSSProperties;
   containerStyle?:React.CSSProperties;
   label?: string;
-  errors?: Record<string, unknown>;
+  errors?: FieldErrors<T>;
   searchStyle?:React.CSSProperties;
 }
 
-const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ value, onChange,searchStyle, inputStyle,containerStyle, dropdownStyle, buttonStyle, label, errors, ...props }) => {
+const PhoneNumberInput: React.FC<PhoneNumberInputProps<{}>> = ({ name, value, onChange,searchStyle, inputStyle,containerStyle, dropdownStyle, buttonStyle, label, errors, ...props }) => {
   return (
     <div className="mb-6">
       {label && (
@@ -51,11 +54,12 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ value, onChange,sea
         }}
         {...props}
       />
-      {errors && (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-400" id="phone-input-error">
-          {errors['phone-input'] as string}
-        </p>
-      )}
+      			{errors && (
+				<ErrorField
+					errors={errors}
+					name={name}
+				/>
+			)}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useInsertionEffect, useLayoutEffect } from 'react'
-import { Controller, FieldErrors, FieldName, useForm } from 'react-hook-form'
+import { Controller, DefaultValues, FieldErrors, FieldName, SubmitHandler, useForm } from 'react-hook-form'
 import { DependencyValue, FormConfig, FieldInput } from '@/types/form'
 import useDynamicForm from '@/hooks/use-dynamic-form'
 import { FieldValuesFromFieldErrors } from '@hookform/error-message'
@@ -7,17 +7,18 @@ import { getFieldComponent } from '../base/_index'
 import { cn } from '@/utils/helpers'
 import { ZodType } from 'zod'
 
+ 
 export interface DynamicFormProps<T extends Record<string, unknown>> {
 	id: string
 	config: FormConfig<T>
-	defaultValues?: Partial<T>
+	defaultValues?: DefaultValues<T> | undefined
 	schema?: ZodType<any, any, any>
 	className?: string
 	darkMode?: boolean
 }
 
 const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<T>) => {
-	const { id, config, schema, className, darkMode = true } = props
+	const { id, config, schema, className, darkMode = false, defaultValues } = props
 	if(!config?.fields){
 		throw Error('Fields are required in the config!')
 	}
@@ -27,7 +28,7 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 		watch,
 		reset,
 		formState: { errors }
-	} = useDynamicForm<T>(id, config, schema)
+	} = useDynamicForm<T>(id, config, schema, defaultValues)
 
 	useEffect(() => {
 		const defaultValues = config.fields?.reduce((acc, field) => {
@@ -42,10 +43,9 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 		}
 	}, [config.fields, reset])
 
-	const submitHandler = (data: T) => {
-		config?.form?.onSubmit(data)
-	}
-
+	const submitHandler: SubmitHandler<T> = (data) => {
+		config?.form?.onSubmit(data);
+	  };
 	return (
 		<form
 			id={id || 'form'}
@@ -60,10 +60,10 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 				{config?.fields?.map((fieldData: FieldInput<T>) => {
 					const dependencyValues = fieldData.dependency?.on.reduce((acc, fieldName) => {
 						acc[fieldName] = watch(
-							fieldName as FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
+							fieldName
 						)
-						return acc
-					}, {} as DependencyValue<string[]>)
+						return acc 
+					}, {} as Partial<T>) as Partial<T>
 					const FieldComponent = getFieldComponent(fieldData.type)
 
 					return (
@@ -87,14 +87,11 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 													errors={errors}
 													onChange={controlledField.onChange as (...event: any[]) => void}
 													name={
-														controlledField.name as FieldName<
-															FieldValuesFromFieldErrors<FieldErrors<T>>
-														>
+														controlledField.name as keyof T
 													}
-													className={cn(fieldData?.className, fieldData?.customClassName?.input)}
+													className={cn(fieldData?.className)}
 													style={{
 														...fieldData?.style,
-														...fieldData.styles?.input
 													}}
 												/>
 											) : (
@@ -105,14 +102,11 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 													errors={errors}
 													onChange={controlledField.onChange as (...event: any[]) => void}
 													name={
-														controlledField.name as FieldName<
-															FieldValuesFromFieldErrors<FieldErrors<T>>
-														>
+														controlledField.name as keyof T
 													}
-													className={cn(fieldData?.className, fieldData?.customClassName?.input)}
+													className={cn(fieldData?.className)}
 													style={{
 														...fieldData?.style,
-														...fieldData.styles?.input
 													}}
 												/>
 											)}

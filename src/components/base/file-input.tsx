@@ -1,19 +1,20 @@
 import React, { InputHTMLAttributes, useState, useEffect } from 'react';
 import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
 import { FieldErrors, FieldName } from 'react-hook-form';
+import ErrorField from './error-field';
 
-interface FileInputProps<T> extends InputHTMLAttributes<HTMLInputElement> {
+interface FileInputProps<T extends Record<string, unknown>> extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>
+  name: Extract<keyof T, string>;
   errors?: FieldErrors<T>;
   mode?: 'priority' | 'lazy';
   onUpload?: (file: File) => Promise<string>;
   allowedExtensions?: string[];
-  value?: string | null;
+  value?: string;
   onDelete?: () => void;
 }
 
-const FileInput = <T,>({
+const FileInput = <T extends Record<string, unknown>>({
   label,
   name,
   errors,
@@ -23,8 +24,8 @@ const FileInput = <T,>({
   value,
   onDelete,
   ...props
-}: FileInputProps<T>) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(value);
+}: FileInputProps<T> ) => {
+  const [previewUrl, setPreviewUrl] = useState<string | undefined | null>(value);
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
@@ -85,8 +86,8 @@ const FileInput = <T,>({
           {...props}
         />
       </div>
-      <ErrorMessage errors={errors} name={name} />
-    </div>
+      {errors && <ErrorField errors={errors} name={name} />}
+      </div>
   );
 };
 

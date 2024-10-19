@@ -3,10 +3,11 @@ import { FieldErrors, FieldValues, FieldName } from 'react-hook-form';
 import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
 import { Option } from '@/types/form';
 import { cn } from '@/utils/helpers';
+import ErrorField from './error-field';
 
-interface CheckboxInputProps<T extends FieldValues> extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
+interface CheckboxInputProps<T extends Record<string, unknown>> extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
   label?: string;
-  name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>;
+  name: Extract<keyof T, string>;
   errors?: FieldErrors<T>;
   options: Option[];
   value?: string[];
@@ -15,7 +16,7 @@ interface CheckboxInputProps<T extends FieldValues> extends Omit<InputHTMLAttrib
   onChange: (value: string[]) => void;
 }
 
-const CheckboxInput = <T extends FieldValues>({
+const CheckboxInput = <T extends Record<string, unknown>>({
   label,
   errors,
   name,
@@ -64,7 +65,7 @@ const CheckboxInput = <T extends FieldValues>({
           </div>
         ))}
       </div>
-      {errors && <ErrorMessage errors={errors} name={name} />}
+      {errors && <ErrorField errors={errors} name={name} />}
     </div>
   );
 };

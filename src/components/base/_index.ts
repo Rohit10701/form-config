@@ -6,7 +6,6 @@ import PhoneNumberInput from './phone-input'
 import RadioInput from './radio-input'
 import SelectInput from './select-input'
 import TextareaInput from './textarea-input'
-import CurrencyCustomInput from './currency-input'
 import ColorInput from './color-input'
 import FileInput from './file-input'
 import ReadOnlyInput from './readonly-input'
@@ -27,8 +26,6 @@ export function getFieldComponent(type: string): React.FC<any> {
 			return DateInput
 		case 'time':
 			return TimeInput
-		case 'currency':
-			return CurrencyCustomInput
 		case 'color':
 			return ColorInput
 		case 'file':
@@ -49,7 +46,6 @@ export {
 	RadioInput,
 	TextareaInput,
 	ReadOnlyInput,
-	CurrencyCustomInput,
 	ColorInput,
 	FileInput
 }
