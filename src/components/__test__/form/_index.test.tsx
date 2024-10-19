@@ -5,7 +5,7 @@ import { describe } from 'node:test'
 import { z } from 'zod'
 
 // Mock form configurations
-const formConfig = {
+const formConfig  = {
 	form: {
 		id: 'test-form',
 		submitText: 'Submit',
