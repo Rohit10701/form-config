@@ -7,7 +7,7 @@ export interface FormConfig<T extends Record<string, unknown>> {
 	form: {
 		id: string
 		submitText: ReactNode | string
-		onSubmit: (data: T) => void
+		onSubmit: <T>(data : T) => void
 	}
 	fields: FieldInput<T>[]
 }
@@ -24,7 +24,7 @@ export type Option = {
 	value: string
 }
 
-export type FieldInput<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & {
+export interface FieldInput<T extends FieldValues> extends Omit<InputHTMLAttributes<HTMLInputElement>, "name">  {
 	name: keyof T
 	errors?: FieldErrors<T>
 	value?:
@@ -43,10 +43,6 @@ export type FieldInput<T extends FieldValues> = InputHTMLAttributes<HTMLInputEle
 	options?: Option[]
 	component?: ComponentType<any> | keyof JSX.IntrinsicElements;
 	styles?: React.CSSProperties
-}
-
-export type DependencyValue<T extends string[]> = {
-	[K in T[number]]?: string
 }
 
 export type GenericFieldType = 'text' | 'email' | 'password' | 'number' | 'range'

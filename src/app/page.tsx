@@ -9,11 +9,11 @@ import DynamicForm from '@/components/form/_index'
 import testFormConfig from '@/utils/constant'
 
 type FormType = {
+	email1: string
 	email: string
-	email2: string
 	username: string
 }
-const formConfig2: FormConfig<FormType> = {
+const formConfig2 : FormConfig<FormType> = {
 	form: {
 		id: '1',
 		submitText: 'submit',
@@ -24,40 +24,32 @@ const formConfig2: FormConfig<FormType> = {
 	fields: [
 		{
 			name: 'email',
-			label: 'Email',
-			type: 'email',
-			required: true,
-			placeholder: 'Email',
-			value: 'rohit@gmail.com'
-		},
-		{
-			name: 'email2',
 			label: 'Email2',
 			type: 'email',
 			placeholder: 'Email2',
 			value: ''
 		},
 		{
-			name: 'username',
-			label: 'Username',
-			type: 'text',
-			placeholder: 'Username',
-			value: 'rohit',
+			name: 'email1',
+			label: 'Email',
+			type: 'email',
 			required: true,
-			dependency: {
-				on: ['email', 'email2'],
-				condition: (value) => value.email === 'rohit@gmail.com'
-			}
+			placeholder: 'Email',
+			value: 'rohit@gmail.com'
+		},
+
+		{
+			name: 'username',
+			label : "USERNMAE",
+			type : "text"
 		}
 	]
 }
 
 const Home = () => {
-	const { forms, getFormValue } = useFormContext()
+	const { forms, getFormValue } = useFormContext<FormType>()
 
-	const defaultValues = {
-		email: 'rohit@kumar.com'
-	}
+
 	// const value  = useFormWatch("2")
 	const handleClick = (id: string) => {
 		const value = getFormValue(id, 'username')
@@ -75,7 +67,6 @@ const Home = () => {
 			<DynamicForm
 				id='2'
 				config={formConfig2}
-				defaultValues={defaultValues}
 			/>
 		</>
 	)

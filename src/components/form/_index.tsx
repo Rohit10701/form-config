@@ -1,13 +1,19 @@
 import React, { ReactNode, useEffect, useInsertionEffect, useLayoutEffect } from 'react'
-import { Controller, DefaultValues, FieldErrors, FieldName, SubmitHandler, useForm } from 'react-hook-form'
-import { DependencyValue, FormConfig, FieldInput } from '@/types/form'
+import {
+	Controller,
+	DefaultValues,
+	FieldErrors,
+	FieldName,
+	SubmitHandler,
+	useForm
+} from 'react-hook-form'
+import { FormConfig, FieldInput } from '@/types/form'
 import useDynamicForm from '@/hooks/use-dynamic-form'
 import { FieldValuesFromFieldErrors } from '@hookform/error-message'
 import { getFieldComponent } from '../base/_index'
 import { cn } from '@/utils/helpers'
 import { ZodType } from 'zod'
 
- 
 export interface DynamicFormProps<T extends Record<string, unknown>> {
 	id: string
 	config: FormConfig<T>
@@ -19,9 +25,6 @@ export interface DynamicFormProps<T extends Record<string, unknown>> {
 
 const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<T>) => {
 	const { id, config, schema, className, darkMode = false, defaultValues } = props
-	if(!config?.fields){
-		throw Error('Fields are required in the config!')
-	}
 	const {
 		control,
 		handleSubmit,
@@ -44,14 +47,14 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 	}, [config.fields, reset])
 
 	const submitHandler: SubmitHandler<T> = (data) => {
-		config?.form?.onSubmit(data);
-	  };
+		config?.form?.onSubmit(data)
+	}
 	return (
 		<form
-			id={id || 'form'}
+			id={id}
 			onSubmit={handleSubmit(submitHandler)}>
 			<div
-				data-testid={id || "test-form"}
+				data-testid={id || 'test-form'}
 				className={cn(
 					'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 bg-white dark:bg-slate-600',
 					`${darkMode ? ' dark ' : ''}`,
@@ -59,10 +62,8 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 				)}>
 				{config?.fields?.map((fieldData: FieldInput<T>) => {
 					const dependencyValues = fieldData.dependency?.on.reduce((acc, fieldName) => {
-						acc[fieldName] = watch(
-							fieldName
-						)
-						return acc 
+						acc[fieldName] = watch(fieldName)
+						return acc
 					}, {} as Partial<T>) as Partial<T>
 					const FieldComponent = getFieldComponent(fieldData.type)
 
@@ -70,43 +71,38 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 						(!fieldData.dependency ||
 							(fieldData.dependency && fieldData.dependency.condition(dependencyValues))) && (
 							<Controller
-								key={fieldData.name}
+								key={fieldData.name as string}
 								name={fieldData.name}
 								control={control}
 								render={({ field: controlledField }) => {
 									const CustomComponent = fieldData?.component
-									const { ref, value, ...rest } = controlledField;
+									const { ref, value, ...rest } = controlledField
 									return (
 										<div>
 											{CustomComponent ? (
 												<CustomComponent
-													value={value || ""}
+													value={value || ''}
 													{...fieldData}
 													{...rest}
-													
 													errors={errors}
 													onChange={controlledField.onChange as (...event: any[]) => void}
-													name={
-														controlledField.name as keyof T
-													}
+													name={controlledField.name as keyof T}
 													className={cn(fieldData?.className)}
 													style={{
-														...fieldData?.style,
+														...fieldData?.style
 													}}
 												/>
 											) : (
 												<FieldComponent
 													{...fieldData}
-													value={value || ""}
+													value={value || ''}
 													{...rest}
 													errors={errors}
 													onChange={controlledField.onChange as (...event: any[]) => void}
-													name={
-														controlledField.name as keyof T
-													}
+													name={controlledField.name as keyof T}
 													className={cn(fieldData?.className)}
 													style={{
-														...fieldData?.style,
+														...fieldData?.style
 													}}
 												/>
 											)}
@@ -119,7 +115,7 @@ const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<
 				})}
 			</div>
 			<div className='flex justify-end'>
-				<button type='submit'>{config?.form?.submitText}</button>
+				<button type='submit'>{config.form.submitText}</button>
 			</div>
 		</form>
 	)

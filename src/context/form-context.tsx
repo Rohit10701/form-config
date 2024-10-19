@@ -20,7 +20,7 @@ export const useFormContext = <T extends FieldValues>() => {
 	return context
 }
 
-export const FormProvider = ({ children }: { children: ReactNode }) => {
+export const FormProvider = <T extends Record<string, unknown>>({ children }: { children: ReactNode }) => {
 	const [forms, setForms] = useState<Record<string, UseFormReturn<any>>>({})
 
 	// Add form to the context
@@ -29,7 +29,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
 	}
 
 	// Get form value
-	const getFormValue = (id: string, name: keyof any) => {
+	const getFormValue = (id: string, name: keyof T) => {
 		return forms?.[id]?.getValues(name as string)
 	}
 
