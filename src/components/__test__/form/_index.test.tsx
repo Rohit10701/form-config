@@ -1,11 +1,16 @@
 import DynamicForm from '@/components/form/_index'
 import { FormProvider } from '@/context/form-context'
+import { FormConfig } from '@/types/form'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe } from 'node:test'
 import { z } from 'zod'
 
 // Mock form configurations
-const formConfig  = {
+type FormValueType = {
+	"username" : string
+	"email" : string
+}
+const formConfig : FormConfig<FormValueType> = {
 	form: {
 		id: 'test-form',
 		submitText: 'Submit',
@@ -36,12 +41,12 @@ describe('Dynamic Form Component', () => {
 		const renderWithoutFields = () => {
 			render(
 				<FormProvider>
-					<DynamicForm config={{}} />
+					<DynamicForm id="1" config={{ form : {"id" : "1", "onSubmit" : ()=>{},"submitText" : ""}, fields : []}} />
 				</FormProvider>
 			)
 		}
 
-		expect(renderWithoutFields).toThrow('Fields are required in the config!')
+		expect(renderWithoutFields).toThrowErrorMatchingSnapshot('Fields are required in the config!')
 	})
 
 	test('render the component with correct config', () => {
@@ -63,7 +68,7 @@ describe('Dynamic Form Component', () => {
 
 	test('rendering of select component', () => {
 		// other component is being rendered correctly apart from generic input
-		const selectFormConfig = {
+		const selectFormConfig : FormConfig<FormValueType & {selectField : string}> = {
 			...formConfig,
 			fields: [
 				...formConfig.fields,
@@ -129,7 +134,7 @@ describe('Dynamic Form Component', () => {
 
 	/* Field Dependencies &  Dynamic Behavior */
 	test('test for the dependency rendering', () => {
-		const dependentFormConfig = {
+		const dependentFormConfig : FormConfig<FormValueType & {email2 : string}> = {
 			...formConfig,
 			fields: [
 				...formConfig.fields,
@@ -234,7 +239,7 @@ describe('Dynamic Form Component', () => {
 
 	/* Validating Schema */
 	test('check for validating required schema with correct data', async () => {
-		const dependentFormConfig = {
+		const dependentFormConfig : FormConfig<FormValueType & {email2 : string}> = {
 			...formConfig,
 			fields: [
 				...formConfig.fields,
@@ -251,6 +256,7 @@ describe('Dynamic Form Component', () => {
 		render(
 			<FormProvider>
 				<DynamicForm
+				id="form-test"
 					schema={schema}
 					config={dependentFormConfig}
 				/>

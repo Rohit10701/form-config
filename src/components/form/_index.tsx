@@ -25,6 +25,9 @@ export interface DynamicFormProps<T extends Record<string, unknown>> {
 
 const DynamicForm = <T extends Record<string, unknown>>(props: DynamicFormProps<T>) => {
 	const { id, config, schema, className, darkMode = false, defaultValues } = props
+	if(config.fields.length == 0){
+		throw new Error("Fields are required in the config!")
+	}
 	const {
 		control,
 		handleSubmit,
