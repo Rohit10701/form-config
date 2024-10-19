@@ -9,7 +9,7 @@ const formConfig = {
 	form: {
 		id: 'test-form',
 		submitText: 'Submit',
-		onSubmit: jest.fn() // Mock submit handler
+		onSubmit: jest.fn()
 	},
 	fields: [
 		{

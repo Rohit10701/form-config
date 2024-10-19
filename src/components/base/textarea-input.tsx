@@ -1,7 +1,7 @@
 import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
 import React, { TextareaHTMLAttributes } from 'react';
 import { FieldErrors, FieldName } from 'react-hook-form';
-import { cn } from '@/utils/helpers'; // Ensure cn is imported
+import { cn } from '@/utils/helpers';
 
 interface TextareaInputProps<T> extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -17,7 +17,7 @@ const TextareaInput = <T,>({
   ...props
 }: TextareaInputProps<T>) => {
   return (
-    <div className="mb-6"> {/* Added margin bottom for spacing */}
+    <div className="mb-6">
       {label && (
         <label htmlFor={name} className={cn("block mb-2 text-sm font-medium text-gray-900 dark:text-white")}>
           {label}

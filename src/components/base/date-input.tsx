@@ -4,8 +4,8 @@ import DatePicker, { DatePickerProps } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface DateInputProps {
-	value?: Date | [Date, Date] // Accommodate single date or date range
-	onChange?: (date: Date | [Date, Date] | null) => void // Handle both single and range selection
+	value?: Date | [Date, Date]
+	onChange?: (date: Date | [Date, Date] | null) => void
 	className?: string
 	label?: string
   wrapperClassName? :string,
@@ -15,8 +15,6 @@ interface DateInputProps {
 const DateInput: React.FC<DateInputProps> = ({ name, value, onChange, className, wrapperClassName, label, ...props }) => {
 	return (
 		<div className='mb-6'>
-			{' '}
-			{/* Added margin bottom for spacing */}
 			{label && (
 				<label
 					className={cn('block mb-2 text-sm font-medium text-gray-900 dark:text-white')}
@@ -27,9 +25,9 @@ const DateInput: React.FC<DateInputProps> = ({ name, value, onChange, className,
 			{/* @ts-ignore */}
 			<DatePicker
       name={name}
-				selected={Array.isArray(value) ? value[0] : value} // Handle single date selection
-				startDate={Array.isArray(value) ? value[0] : undefined} // Handle range start date
-				endDate={Array.isArray(value) ? value[1] : undefined} // Handle range end date
+				selected={Array.isArray(value) ? value[0] : value}
+				startDate={Array.isArray(value) ? value[0] : undefined}
+				endDate={Array.isArray(value) ? value[1] : undefined}
 				onChange={(date) => {
 					if (onChange) {
 						onChange(date as Date | [Date, Date] | null)

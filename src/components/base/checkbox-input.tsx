@@ -2,9 +2,8 @@ import React, { InputHTMLAttributes } from 'react';
 import { FieldErrors, FieldValues, FieldName } from 'react-hook-form';
 import { ErrorMessage, FieldValuesFromFieldErrors } from '@hookform/error-message';
 import { Option } from '@/types/form';
-import { cn } from '@/utils/helpers'; // Ensure cn is imported
+import { cn } from '@/utils/helpers';
 
-// Define the generic props for the CheckboxInput component
 interface CheckboxInputProps<T extends FieldValues> extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
   label?: string;
   name: FieldName<FieldValuesFromFieldErrors<FieldErrors<T>>>;
@@ -13,7 +12,7 @@ interface CheckboxInputProps<T extends FieldValues> extends Omit<InputHTMLAttrib
   value?: string[];
   styles?: React.CSSProperties;
   required?: boolean;
-  onChange: (value: string[]) => void; // Explicitly define onChange prop
+  onChange: (value: string[]) => void;
 }
 
 const CheckboxInput = <T extends FieldValues>({
@@ -40,13 +39,13 @@ const CheckboxInput = <T extends FieldValues>({
   };
 
   return (
-    <div className="mb-6"> {/* Added margin bottom for spacing */}
+    <div className="mb-6"> 
       {label && (
         <label className={cn("block mb-2 text-sm font-medium text-gray-900 dark:text-white")} htmlFor={name}>
           {label}
         </label>
       )}
-      <div className="flex flex-col space-y-2"> {/* Flex column for spacing between checkboxes */}
+      <div className="flex flex-col space-y-2">
         {options.map((option) => (
           <div key={option.value} className="flex items-center">
             <input
@@ -65,7 +64,7 @@ const CheckboxInput = <T extends FieldValues>({
           </div>
         ))}
       </div>
-      {errors && <ErrorMessage errors={errors} name={name} />} {/* Optional styling for errors */}
+      {errors && <ErrorMessage errors={errors} name={name} />}
     </div>
   );
 };

@@ -55,14 +55,14 @@ const FileInput = <T,>({
   };
 
   const isFileExtensionAllowed = (file: File) => {
-    if (allowedExtensions.length === 0) return true; // Allow all if no specific extensions are defined
+    if (allowedExtensions.length === 0) return true; 
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
     return fileExtension ? allowedExtensions.includes(fileExtension) : false;
   };
 
   const handleDelete = () => {
     setFile(null);
-    setPreviewUrl(null); // Clear preview URL when deleted
+    setPreviewUrl(null);
     if (onDelete) {
       onDelete();
     }

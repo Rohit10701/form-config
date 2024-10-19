@@ -10,7 +10,7 @@ const ReadOnlyInput = <T extends Record<string, unknown>>({
   ...props
 }: FieldInput<T>) => {
   return (
-    <div className="mb-6"> {/* Added margin bottom for spacing */}
+    <div className="mb-6">
       {label && (
         <label htmlFor={name} className={cn("block mb-2 text-sm font-medium text-gray-900 dark:text-white")}>
           {label}
